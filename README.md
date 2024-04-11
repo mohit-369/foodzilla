@@ -17,7 +17,7 @@
 
 ### API Endpoints
 
-### Authentication
+### 1. Authentication
 
 ### Signup
 
@@ -62,7 +62,7 @@
   }
   ```
 
-### Admin Routes
+### 2. Admin Routes
 
 #### Add a Restaurent
 
@@ -108,7 +108,7 @@
   }
   ```
 
-### Resaturent Owner Routes
+### 3. Resaturent Owner Routes
 
 #### Add Dishes
 
@@ -185,7 +185,7 @@
   }
   ```
 
-### User Routes
+### 4. User Routes
 
 #### Get all Orders placed by user
 
@@ -239,7 +239,7 @@
 
   - **Response Status Code**: 200
 
-  ### Unprotected Routes
+  ### 5. Unprotected Routes
 
   #### Get the list of all Restaurents
 
