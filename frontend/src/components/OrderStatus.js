@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { authService } from "../services/authServices";
 const OrderStatus = () => {
   const [foodlist, setFoodlist] = useState([]);
   const [data, setData] = useState([]);
@@ -8,11 +9,19 @@ const OrderStatus = () => {
     Orders();
   }, []);
   const Orders = async () => {
+    const token = authService.getToken();
+    console.log("token:", token);
     axios
-      .get("http://localhost:8001/api/ResOrder")
+      .get("http://localhost:8001/api/ResOrder", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
+        console.log("response from backend",response);
         setData(response.data);
         const initializedFoodlist = response.data.map((item) => ({
+          _id: item._id,
           dishName: item.dishName,
           quantity: item.quantity,
           price: item.dishPrice * item.quantity,
@@ -29,17 +38,21 @@ const OrderStatus = () => {
   };
   const handleOrder = async () => {
     try {
-      const requestData = JSON.stringify(foodlist);
-      const data = await axios.post(
+      const token = authService.getToken();
+      const data = {
+        ...foodlist,
+        token,
+      };
+      const response = await axios.post(
         "http://localhost:8001/api/updateOrder",
-        requestData,
+        data,
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      console.log("order confirmed", data);
+      console.log("order confirmed", response);
     } catch (error) {
       console.log("error", error);
     }

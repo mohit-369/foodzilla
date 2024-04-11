@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { authService } from "../services/authServices";
 const UserOrderStatus = () => {
   const [foodlist, setFoodlist] = useState([]);
   const [data, setData] = useState([]);
@@ -8,8 +9,13 @@ const UserOrderStatus = () => {
     Orders();
   }, []);
   const Orders = async () => {
+    const token = authService.getToken();
     axios
-      .get("http://localhost:8001/api/userOrder")
+      .get("http://localhost:8001/api/userOrder", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setData(response.data);
         const initializedFoodlist = response.data.map((item) => ({

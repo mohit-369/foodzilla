@@ -1,70 +1,225 @@
-# Getting Started with Create React App
+# Campus Food Delivery App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Role Based Authorisation
+## Roles:
+   - Admin 
+   - Restaurent Owner
+   - User
 
-## Available Scripts
+### Tech Stack
 
-In the project directory, you can run:
+- Frontend: React.js
+- Backend: Node.js, Express.js, Jwt
+- Database: MongoDB
+- Deploy: 
 
-### `npm start`
+### API Endpoints
+    
+### Admin Routes
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### Add a Restaurent
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Description** : Add a Restaurent into the list
+- **Method**: POST
+- **Endpoint**: `/addRes`
+- **Request Body**:
+  ```json
+  {
+    "Resname": "string",
+    "Ownername": "string",
+    "phone": "string"
+  }
+  ```
+- **Response Status Code**: 200
+- **Response Body**:
+  ```json
+  {
+    "Restaurent added succesfully"
+  }
+  ```
 
-### `npm test`
+#### Delete a Restaurent
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Description** : Delete a Restaurent and its all respective dishes
+- **Method**: POST
+- **Endpoint**: `/deleteRes`
+- **Request Body**:
+  ```json
+  {
+    "_id": "string",
+    "Resname": "string",
+    "Ownername": "string",
+    "phone": "string",
+    "selected": "boolean"
+  }
+  ```
+- **Response Status Code**: 201
+- **Response Body**:
+  ```json
+  {
+    "Restaurants deleted successfully"
+  }
+  ```
 
-### `npm run build`
+### Resaturent Owner Routes
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### Add Dishes
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+-**Description**: Add dishes to there restaurent
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Method**: POST
+- **Endpoint**: `/adddish`
+- **Response Status Code**: 200
+- **Response Body**:
+  ```json
+  {
+    "dishName": "string",
+    "dishPrice": "Int",
+    "phone": "string"
+  }
+  ```
 
-### `npm run eject`
+#### Delete Dishes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+-**Description**: Delete dishes from there restaurent
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Method**: POST
+- **Endpoint**: `/deletedishes`
+- **Response Status Code**: 200
+- **Response Body**:
+  ```json
+  {
+    "data": {
+      "_id": "string",
+      "dishName": "string",
+      "dishPrice": "string",
+      "phone": "string",
+      "selected": "boolean"
+    },
+    "token": "string"
+  }
+  ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### Update order status
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+-**Description**: Update order either confirm a given order or reject
 
-## Learn More
+- **Method**: POST
+- **Endpoint**: `/updateOrder`
+- **Response Status Code**: 200
+- **Response Body**:
+  ```json
+  {
+    "data": {
+      "_id": "string",
+      "dishName": "string",
+      "dishPrice": "Int",
+      "ph": "string",
+      "quantity": "Int",
+      "accept": "boolean"
+    },
+    "token": "string"
+  }
+  ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### Get the order details placed by users
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Method**: GET
+- **Endpoint**: `/ResOrder`
+- **Response Status Code**: 200
+- **Response Body**:
+  ```json
+  {
+    "dishName": "string",
+    "dishPrice": "Int",
+    "ph": "string",
+    "quantity": "Int",
+    "accept": "boolean"
+  }
+  ```
 
-### Code Splitting
+### User Routes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### Get all Orders placed by user
 
-### Analyzing the Bundle Size
+- **Method**: GET
+- **Endpoint**: `/allOrder`
+- **Response Body**:
+  ```json
+  {
+    "dishName": "string",
+    "dishPrice": "Int",
+    "ph": "string",
+    "quantity": "Int",
+  }
+  ```
+- **Response Status Code**: 200 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### Get specific Orders placed by user that are accepted by restaurent
 
-### Making a Progressive Web App
+- **Method**: GET
+- **Endpoint**: `/userOrder`
+- **Respons Body**:
+  ```json
+  {
+    "dishName": "string",
+    "dishPrice": "Int",
+    "ph": "string",
+    "quantity": "Int",
+    "accept": "boolean"
+  }
+  ```
+- **Response Status Code**: 200 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### Send Order 
 
-### Advanced Configuration
+- **Method**: POST
+- **Endpoint**: `/sendOrder`
+- **Request Body**:
+  ```json
+  {
+    "data": {
+      "dishName": "string",
+      "dishPrice": "Int",
+      "ph": "string",
+      "quantity": "Int",
+      "selected": "boolean"
+    },
+    "token": "string"
+  }
+  ```
+  - **Response Status Code**: 200
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  ### Unprotected Routes
 
-### Deployment
+  #### Get the list of all Restaurents 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **Method**: GET
+- **Endpoint**: `/getAllRes`
+- **Response Body**:
+  ```json
+  {
+    "Resname": "string",
+    "Ownername": "string",
+    "phone": "string"
+  }
+  ```
+- **Response Status Code**: 200 
 
-### `npm run build` fails to minify
+#### Get the list of dishes in a Restaurents 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Method**: GET
+- **Endpoint**: `/getAllDishes/:phone`
+- **Parameters**:
+  - `phone`: To apply a filter by phone as a id to Restaurents
+- **Response Body**:
+  ```json
+  {
+    "dishName": "string",
+    "dishPrice": "Int",
+    "ph": "string",
+    "quantity": "Int",
+    "selected": "boolean"
+  }
+  ```
+- **Response Status Code**: 200 

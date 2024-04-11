@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Register from "./Register";
 import { BrowserRouter, Link, Router, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { authService } from "../services/authservices";
+import { authService } from "../services/authServices";
 // Functional component for the login portal
 const Login = () => {
   // State to manage email and password input values
@@ -22,13 +22,20 @@ const Login = () => {
       const response = axios.post("http://localhost:8001/api/login", userData);
       const user = (await response).data.user.role;
       const token = (await response).data.token;
+      const userid = (await response).data.user.phone;
       console.log(user);
-      console.log(token);
+      console.log((await response).data.user);
       if (token) {
         console.log("login");
         authService.setToken(token);
         if (user == "admin") {
           navigate("/admin");
+        }
+        if (user == "user") {
+          navigate("/Restorent");
+        }
+        if (user == "owner") {
+          navigate(`/ResDetails/${userid}`);
         }
       }
     } catch (error) {

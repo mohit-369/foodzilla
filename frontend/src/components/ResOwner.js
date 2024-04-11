@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios"; // Import Axios
 import OrderStatus from "./OrderStatus";
-
+import { authService } from "../services/authServices";
 const ResOwner = () => {
   const { phone } = useParams();
   const [foodlist, setFoodlist] = useState([]);
   const [data, setData] = useState([]);
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState();
-  const [resid, setResid] = useState();
+  const [dishName, setName] = useState("");
+  const [dishPrice, setPrice] = useState();
+  const [ph, setResid] = useState();
   useEffect(() => {
     // Use Axios for fetching data
     axios
@@ -33,13 +33,19 @@ const ResOwner = () => {
 
   const handleDeleteDish = async () => {
     try {
+      const selectedItems = foodlist.filter((item) => item.selected);
+      const token = authService.getToken();
+      const data = {
+        ...selectedItems,
+        token,
+      };
       // Stringify the data and set the Content-Type header
       // const requestData = JSON.stringify(foodlist);
-      console.log("Data from backend :", foodlist);
+      console.log("Data from backend :", data);
       // Use Axios for the POST request with proper headers
       const response = await axios.post(
         "http://localhost:8001/api/deletedishes",
-        foodlist
+        data
       );
 
       console.log("response :", response);
@@ -47,14 +53,17 @@ const ResOwner = () => {
       console.error("Error placing order:", error);
     }
   };
-  const handelSubmit = async () => {
+  const handelSubmit = async (event) => {
+    event.preventDefault();
     try {
+      const token = authService.getToken();
       axios.post(
         "http://localhost:8001/api/adddish",
         {
-          dishName: name,
-          dishPrice: price,
-          ph: resid,
+          dishName,
+          dishPrice,
+          ph,
+          token,
         },
         {
           headers: {
@@ -97,21 +106,21 @@ const ResOwner = () => {
         <input
           type="name"
           placeholder="Dish Name"
-          value={name}
+          value={dishName}
           onChange={(e) => setName(e.target.value)}
         />
         <br></br>
         <input
           type="number"
           placeholder="Dish Price"
-          value={price}
+          value={dishPrice}
           onChange={(e) => setPrice(e.target.value)}
         />
         <br></br>
         <input
           type="Restaurent id"
           placeholder="resid"
-          value={resid}
+          value={ph}
           onChange={(e) => setResid(e.target.value)}
         />
         <br></br>

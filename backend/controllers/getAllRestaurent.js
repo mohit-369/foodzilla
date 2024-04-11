@@ -165,6 +165,7 @@ async function sendOrder(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     const dataToSave = await Promise.all(
       req.body.map(async (item) => {
+        console.log(item);
         const data = new orderData({
           dishName: item.dishName,
           dishPrice: item.dishPrice,
@@ -213,23 +214,48 @@ async function addDish(req, res) {
 
 async function deleteRes(req, res) {
   try {
-    // Assuming req.body is an array of items
-    for (const item of req.body) {
+    for (const key in req.body) {
+      if (key === "token") continue;
+
+      const item = req.body[key];
       if (item.selected === true) {
         await schema.deleteOne({ _id: item._id }); // Assuming each item has an _id field
-      }
-    }
-    for (const item of req.body) {
-      if (item.selected === true) {
-        await Modeldish.deleteMany({ ph: item.ph }); // Assuming each item has an _id field
+        await Modeldish.deleteMany({ ph: item.phone }); // Assuming each item has a phone field
       }
     }
 
-    res.status(200).json({ message: "Restaurent deleted successfully" });
+    res.status(200).json({ message: "Restaurants deleted successfully" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+// async function deleteRes(req, res) {
+//   try {
+//     // Assuming req.body is an array of items
+//     //console.log("data from frontend", req.body);
+//     for (const key of req.body) {
+//       console.log("key:", key);
+//       if (key == "token") continue;
+//       const data = req.body[key];
+//       console.log(data);
+//       if (data.selected === true) {
+//         await schema.deleteOne({ _id: data._id }); // Assuming each item has an _id field
+//       }
+//     }
+//     for (const key of req.body) {
+//       if (key == "token") continue;
+//       const data = req.body[key];
+//       if (data[key].selected === true) {
+//         await Modeldish.deleteMany({ ph: data[key].ph });
+//       }
+//     }
+//     res.status(200).json({ message: "Restaurent deleted successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// }
 
 // add Restaurent
 

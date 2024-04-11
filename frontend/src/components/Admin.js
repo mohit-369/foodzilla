@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios"; // Import Axios
-
+import { authService } from "../services/authServices";
 const Admin = () => {
-
   const [foodlist, setFoodlist] = useState([]);
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
@@ -12,6 +11,19 @@ const Admin = () => {
 
   useEffect(() => {
     // Use Axios for fetching data
+    getAllrestaurent();
+  }, []);
+  // const handleQuantityChange = (index, quantity) => {
+  //   const updatedFoodlist = [...foodlist];
+  //   updatedFoodlist[index].quantity = quantity;
+  //   setFoodlist(updatedFoodlist);
+  // };
+  const handleResSelection = (index) => {
+    const updatedFoodlist = [...foodlist];
+    updatedFoodlist[index].selected = !updatedFoodlist[index].selected;
+    setFoodlist(updatedFoodlist);
+  };
+  const getAllrestaurent = async () => {
     axios
       .get("http://localhost:8001/api/getAllRes")
       .then((response) => {
@@ -23,24 +35,23 @@ const Admin = () => {
         setFoodlist(initializedFoodlist);
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-
-  const handleResSelection = (index) => {
-    const updatedFoodlist = [...foodlist];
-    updatedFoodlist[index].selected = !updatedFoodlist[index].selected;
-    setFoodlist(updatedFoodlist);
   };
 
   const handleDeleteRes = async () => {
     try {
       const selectedItems = foodlist.filter((item) => item.selected);
+      const token = authService.getToken();
+      const data = {
+        ...selectedItems,
+        token,
+      };
       // Stringify the data and set the Content-Type header
-      const requestData = JSON.stringify(selectedItems);
-      console.log("Data for backend :", requestData);
+      // const reqData = JSON.stringify(data);
+      console.log("Data from frontend :", data);
       // Use Axios for the POST request with proper headers
       const response = await axios.post(
-        "http://localhost:8001/api/deletRes",
-        requestData,
+        "http://localhost:8001/api/deleteRes",
+        data,
         {
           headers: {
             "Content-Type": "application/json",
@@ -48,19 +59,22 @@ const Admin = () => {
         }
       );
 
-      console.log("response :", response);
+      console.log("response from backend :", response);
     } catch (error) {
       console.error("Error placing order:", error);
     }
   };
-  const handelSubmit = async () => {
+  const handelSubmit = async (event) => {
+    event.preventDefault();
     try {
-      axios.post(
+      const token = authService.getToken();
+      const response = await axios.post(
         "http://localhost:8001/api/addRes",
         {
           name,
           owner,
           phone,
+          token,
         },
         {
           headers: {
@@ -68,6 +82,7 @@ const Admin = () => {
           },
         }
       );
+      console.log("response from backend", response);
     } catch (error) {}
   };
   return (
@@ -83,11 +98,12 @@ const Admin = () => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={item.id}>
+            <tr key={item._id}>
               <td>{item.name}</td>
               <td>{item.owner}</td>
               <td>{item.phone}</td>
               <td>
+                {" "}
                 <button onClick={() => handleResSelection(index)}>
                   {foodlist[index].selected ? "Unselect" : "Select"}
                 </button>

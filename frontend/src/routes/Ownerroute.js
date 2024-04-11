@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { authService } from "../services/authservices";
+import { authService } from "../services/authServices";
 
 export const OwnerRoute = ({ children }) => {
   return authService.getUserRole() === "owner" ? (

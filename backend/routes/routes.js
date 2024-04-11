@@ -1,8 +1,11 @@
 const Restaurant = require("../controllers/getAllRestaurent");
+const Admin = require("../controllers/admin");
+const Owner = require("../controllers/owner");
+const User = require("../controllers/user");
+const auth = require("../controllers/auth");
 const express = require("express");
 const cors = require("cors");
 const {
-  userVerification,
   verifyadmin,
   verifyuser,
   verifyowner,
@@ -12,26 +15,26 @@ const router = express.Router();
 router.use(cors());
 
 //Admin
-router.post("/deleteRes", verifyadmin, Restaurant.deleteRes);
-router.post("/addRes", verifyadmin, Restaurant.addRes);
+router.post("/deleteRes", verifyadmin, Admin.deleteRes);
+router.post("/addRes", verifyadmin, Admin.addRes);
 
 // Restaurent Owner
-router.post("/adddish", verifyowner, Restaurant.addDish);
-router.post("/deletedishes", verifyowner, Restaurant.deleteDish);
-router.post("/updateOrder", verifyowner, Restaurant.updateOrder);
-router.get("/ResOrder", verifyowner, Restaurant.getOrderResdetails);
+router.post("/adddish", verifyowner, Owner.addDish);
+router.post("/deletedishes", verifyowner, Owner.deleteDish);
+router.post("/updateOrder", verifyowner, Owner.updateOrder);
+router.get("/ResOrder", verifyowner, Owner.getOrderResdetails);
 //auth
-router.post("/signup", Restaurant.signup);
-router.post("/login", Restaurant.login);
-router.post("/auth", verifyuser, Restaurant.verifyUser);
-//order
-router.get("/allOrder", Restaurant.getAllOrder);
-router.post("/sendOrder", Restaurant.sendOrder);
-router.get("/userOrder", Restaurant.getOrderdetails);
-
+router.post("/signup", auth.signup);
+router.post("/login", auth.login);
+router.post("/auth", verifyuser, auth.verifyUser);
+//User
+router.get("/allOrder", verifyuser, User.getAllOrder);
+router.post("/sendOrder", verifyuser, User.sendOrder);
+router.get("/userOrder", verifyuser, User.getOrderdetails);
+// any one can view
 // All Restaurant Data
-router.get("/getAllRes", Restaurant.getAllRes);
+router.get("/getAllRes", User.getAllRes);
 // All dishes of a Specific Restaurant
-router.get("/getAllDishes/:phone", Restaurant.getAllDishes);
+router.get("/getAllDishes/:phone", User.getAllDishes);
 
 module.exports = router;

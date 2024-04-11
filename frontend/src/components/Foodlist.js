@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios"; // Import Axios
 import OrderStatus from "./OrderStatus";
-
+import { authService } from "../services/authServices";
 const Foodlist = () => {
   const { phone } = useParams();
   const [foodlist, setFoodlist] = useState([]);
@@ -32,20 +32,25 @@ const Foodlist = () => {
   const handleDishSelection = (index) => {
     const updatedFoodlist = [...foodlist];
     updatedFoodlist[index].selected = !updatedFoodlist[index].selected;
+    console.log(updatedFoodlist);
     setFoodlist(updatedFoodlist);
   };
 
   const handlePlaceOrder = async () => {
     try {
       const selectedItems = foodlist.filter((item) => item.selected);
-
+      const token = authService.getToken();
+      const data = {
+        ...selectedItems,
+        token,
+      };
       // Stringify the data and set the Content-Type header
-      const requestData = JSON.stringify(selectedItems);
-      console.log("Data for backend :", requestData);
+     // const requestData = JSON.stringify(selectedItems);
+      console.log("Data for backend :", data);
       // Use Axios for the POST request with proper headers
       const response = await axios.post(
-        "http://localhost:8001/api/post",
-        requestData,
+        "http://localhost:8001/api/sendOrder",
+        data,
         {
           headers: {
             "Content-Type": "application/json",
