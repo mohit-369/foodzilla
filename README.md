@@ -1,20 +1,67 @@
 # Campus Food Delivery App
 
-## Role Based Authorisation
+## Role Based Authorization
+
 ## Roles:
-   - Admin 
-   - Restaurent Owner
-   - User
+
+- Admin
+- Restaurent Owner
+- User
 
 ### Tech Stack
 
 - Frontend: React.js
 - Backend: Node.js, Express.js, Jwt
 - Database: MongoDB
-- Deploy: 
+- Deploy:
 
 ### API Endpoints
-    
+
+### Authentication
+
+### Signup
+
+- **Description** : register every new user
+- **Method**: POST
+- **Endpoint**: `/signup`
+- **Request Body**:
+  ```json
+  {
+    "email": "string",
+    "password": "string",
+    "username": "string",
+    "phone": "string",
+    "role": "string"
+  }
+  ```
+- **Response Status Code**: 200
+- **Response Body**:
+  ```json
+  {
+    "new user added succesfully"
+  }
+  ```
+
+### Login
+
+- **Description** : login
+- **Method**: POST
+- **Endpoint**: `/login`
+- **Request Body**:
+  ```json
+  {
+    "email": "string",
+    "password": "string"
+  }
+  ```
+- **Response Status Code**: 200
+- **Response Body**:
+  ```json
+  {
+    "user logged in succesfully"
+  }
+  ```
+
 ### Admin Routes
 
 #### Add a Restaurent
@@ -150,10 +197,10 @@
     "dishName": "string",
     "dishPrice": "Int",
     "ph": "string",
-    "quantity": "Int",
+    "quantity": "Int"
   }
   ```
-- **Response Status Code**: 200 
+- **Response Status Code**: 200
 
 #### Get specific Orders placed by user that are accepted by restaurent
 
@@ -169,13 +216,14 @@
     "accept": "boolean"
   }
   ```
-- **Response Status Code**: 200 
+- **Response Status Code**: 200
 
-#### Send Order 
+#### Send Order
 
 - **Method**: POST
 - **Endpoint**: `/sendOrder`
 - **Request Body**:
+
   ```json
   {
     "data": {
@@ -188,11 +236,12 @@
     "token": "string"
   }
   ```
+
   - **Response Status Code**: 200
 
   ### Unprotected Routes
 
-  #### Get the list of all Restaurents 
+  #### Get the list of all Restaurents
 
 - **Method**: GET
 - **Endpoint**: `/getAllRes`
@@ -204,9 +253,9 @@
     "phone": "string"
   }
   ```
-- **Response Status Code**: 200 
+- **Response Status Code**: 200
 
-#### Get the list of dishes in a Restaurents 
+#### Get the list of dishes in a Restaurents
 
 - **Method**: GET
 - **Endpoint**: `/getAllDishes/:phone`
@@ -222,4 +271,4 @@
     "selected": "boolean"
   }
   ```
-- **Response Status Code**: 200 
+- **Response Status Code**: 200
