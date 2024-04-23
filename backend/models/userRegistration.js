@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+  otp: {
+    type: 'String',
+    default: 'undefined',
+  }
 });
 userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 12);

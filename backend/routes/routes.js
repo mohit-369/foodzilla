@@ -5,6 +5,9 @@ const User = require("../controllers/user");
 const auth = require("../controllers/auth");
 const express = require("express");
 const cors = require("cors");
+const validation = require('../middleware/validateinput');
+const checkemail = require('../email/nodemailer');
+const otp = require('../email/otp');
 const {
   verifyadmin,
   verifyuser,
@@ -24,7 +27,8 @@ router.post("/deletedishes", verifyowner, Owner.deleteDish);
 router.post("/updateOrder", verifyowner, Owner.updateOrder);
 router.get("/ResOrder", verifyowner, Owner.getOrderResdetails);
 //auth
-router.post("/signup", auth.signup);
+router.post("/signup", validation, auth.signup, checkemail);
+router.post("/otp", otp);
 router.post("/login", auth.login);
 router.post("/auth", verifyuser, auth.verifyUser);
 //User

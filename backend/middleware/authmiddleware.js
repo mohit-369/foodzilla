@@ -1,6 +1,6 @@
 const User = require("../models/userRegistration");
 require("dotenv").config();
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); 
 
 const verifyadmin = (req, res, next) => {
   const token = req.body.token;
